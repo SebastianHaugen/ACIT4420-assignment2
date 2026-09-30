@@ -4,8 +4,6 @@ Option A, Smart Fitness Session Analyzer
 
 import statistics 
 
-from data_generator import generate_fitness_data
-
 # First class for the fitness tracker and its observations
 class Observation:
     def __init__(self, timestamp, heart_rate, skin_response, temperature, activity_level, signal_quality):
