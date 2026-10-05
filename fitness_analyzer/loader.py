@@ -1,11 +1,11 @@
-"""CSV loading, so this reads the participants and session files, validates every
+"""CSV loading: reads the participants and session files, validates every
 row, converts values to the right types, and groups usable rows into
 Session objects. Every rejected row is recorded with its source file,
 row number, field and reason instead of just being silently dropped.
 
 A session is registered as soon as its session_id/participant_id are
 valid, even if every measurement row for that session turns out to be
-rejected, otherwise a session whose data is entirely bad would just
+rejected - otherwise a session whose data is entirely bad would just
 vanish from the output instead of being reported as insufficient data.
 """
 
@@ -56,6 +56,7 @@ def load_participants(path):
     path = Path(path)
     participants = {}
     rejected = []
+    row_number = 1  # the header line
 
     try:
         with open(path, encoding="utf-8", newline="") as handle:
@@ -73,6 +74,12 @@ def load_participants(path):
         raise FileNotFoundError(f"Participants file not found: {path}") from exc
     except PermissionError as exc:
         raise PermissionError(f"Cannot read participants file (permission denied): {path}") from exc
+    except csv.Error as exc:
+        # The file is malformed at the csv level. Keep what was read so far.
+        rejected.append(RejectedRecord(
+            path.name, row_number + 1, "csv_format",
+            f"csv could not parse the file, stopped reading here: {exc}",
+        ))
 
     return participants, rejected
 
@@ -103,7 +110,7 @@ def _parse_participant_row(row):
 def load_sessions(path, participants):
     """Read a fitness-sessions CSV file (valid or intentionally invalid).
 
-    `participants` is the dict returned by load_participants used to
+    `participants` is the dict returned by load_participants - used to
     reject rows referencing a participant_id that doesn't exist.
 
     Returns (dict[session_id -> Session], list[RejectedRecord]).
@@ -112,6 +119,7 @@ def load_sessions(path, participants):
     grouped_observations = {}
     session_participant_ids = {}
     rejected = []
+    row_number = 0
 
     try:
         with open(path, encoding="utf-8", newline="") as handle:
@@ -119,6 +127,7 @@ def load_sessions(path, participants):
             header = next(reader, None)
             if header is None:
                 return {}, rejected
+            row_number = 1  # the header line
 
             for row_number, raw_row in enumerate(reader, start=2):
                 if not raw_row or not _row_has_any_value(raw_row):
@@ -157,6 +166,12 @@ def load_sessions(path, participants):
         raise FileNotFoundError(f"Sessions file not found: {path}") from exc
     except PermissionError as exc:
         raise PermissionError(f"Cannot read sessions file (permission denied): {path}") from exc
+    except csv.Error as exc:
+        # The file is malformed at the csv level. Keep what was read so far.
+        rejected.append(RejectedRecord(
+            path.name, row_number + 1, "csv_format",
+            f"csv could not parse the file, stopped reading here: {exc}",
+        ))
 
     sessions = {}
     for session_id, observations in grouped_observations.items():
