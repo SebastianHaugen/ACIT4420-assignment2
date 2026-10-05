@@ -75,7 +75,7 @@ ACIT4420-assignment2/
 │   └── reports.py
 ├── tests/
 │   ├── __init__.py
-│   └── test_analyzer.py
+│   └── test_analysis.py
 └── output/   (created when the program runs, not committed)
 ```
  
@@ -125,10 +125,10 @@ FIT-2026-005,P002,insufficient_data,False,0,0,
  
 ## Tests
  
-`tests/test_analyzer.py` has 17 tests. They cover valid files, invalid rows (bad id formats, values that can't be converted, unknown participant, wrong row length), a missing file, a csv parsing error, a session where every row gets rejected, and boundary values like a heart rate or signal quality sitting exactly on the limit. They also check the classifications (resting, recovering and insufficient data).
+`tests/test_analysis.py` has 17 tests. They cover valid files, invalid rows (bad id formats, values that can't be converted, unknown participant, wrong row length), a missing file, a csv parsing error, a session where every row gets rejected, and boundary values like a heart rate or signal quality sitting exactly on the limit. They also check the classifications (resting, recovering and insufficient data).
  
 ## Known limitations
  
-The classification thresholds are just numbers that seemed reasonable to me, not based on real fitness research, and they're the same for every participant apart from their own baseline. Skin response and temperature are validated but don't affect the classification, only heart rate and activity level do. Recovery detection is a first half versus second half comparison, so it doesn't look at how fast the drop happens.
- 
+The classification thresholds are just numbers that seemed reasonable to me, not based on real fitness research, and they're the same for every participant apart from their own baseline. Skin response and temperature are validated but don't affect the classification, only heart rate and activity level do. Recovery detection is a first half versus second half comparison, so it doesn't look at how fast the drop happens. It also means a session that peaks in the middle is not flagged as recovering. For example `FIT-2026-002` rises and falls back down, but the second half average is still higher than the first half, so it is classified as moderate activity.
+  
 Bad rows are rejected while the files are being loaded, before they ever reach a session. That means the `rejected_observations` column in `analysis_summary.csv` is always 0, and the real rejections can only be found in `rejected_records.txt`. And if a csv file is broken badly enough that the csv module gives up, everything after that point in the file is skipped.

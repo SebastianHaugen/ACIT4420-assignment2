@@ -1,11 +1,11 @@
-"""CSV loading: reads the participants and session files, validates every
-row, converts values to the right types, and groups usable rows into
+""" For loading the CSV files, it reads the participants and session files, 
+validates every row, converts values to the right types, and groups usable rows into
 Session objects. Every rejected row is recorded with its source file,
 row number, field and reason instead of just being silently dropped.
 
 A session is registered as soon as its session_id/participant_id are
 valid, even if every measurement row for that session turns out to be
-rejected - otherwise a session whose data is entirely bad would just
+rejected, otherwise a session whose data is entirely bad would just
 vanish from the output instead of being reported as insufficient data.
 """
 
@@ -110,7 +110,7 @@ def _parse_participant_row(row):
 def load_sessions(path, participants):
     """Read a fitness-sessions CSV file (valid or intentionally invalid).
 
-    `participants` is the dict returned by load_participants - used to
+    `participants` is the dict returned by load_participants used to
     reject rows referencing a participant_id that doesn't exist.
 
     Returns (dict[session_id -> Session], list[RejectedRecord]).

@@ -15,13 +15,11 @@ SUMMARY_FIELDNAMES = [
     "heart_rate_vs_reference",
 ]
 
-
 def ensure_output_dir(output_dir):
     """Create the output directory (and parents) if it doesn't exist yet."""
     path = Path(output_dir)
     path.mkdir(parents=True, exist_ok=True)
     return path
-
 
 def write_summary_csv(output_dir, results):
     """One row per processed session analysis_summary.csv."""
@@ -32,7 +30,6 @@ def write_summary_csv(output_dir, results):
         for result in results:
             writer.writerow({key: result.get(key, "") for key in SUMMARY_FIELDNAMES})
     return path
-
 
 def write_report_txt(output_dir, results):
     """A readable explanation of each result - analysis_report.txt."""
@@ -51,7 +48,6 @@ def write_report_txt(output_dir, results):
         lines.append("")
     path.write_text("\n".join(lines), encoding="utf-8")
     return path
-
 
 def write_rejected_records_txt(output_dir, rejected_records):
     """Every rejected row with filename, row number, field and reason."""

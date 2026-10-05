@@ -38,7 +38,6 @@ REQUIRED_PARTICIPANT_FIELDS = (
     "baseline_temperature",
 )
 
-
 def validate_participant_id(participant_id):
     """Return participant_id if it fully matches P### , else raise."""
     if not PARTICIPANT_ID_PATTERN.match(participant_id):
@@ -48,7 +47,6 @@ def validate_participant_id(participant_id):
         )
     return participant_id
 
-
 def validate_session_id(session_id):
     """Return session_id if it fully matches FIT-YYYY-NNN, else raise."""
     if not SESSION_ID_PATTERN.match(session_id):
@@ -57,7 +55,6 @@ def validate_session_id(session_id):
             field="session_id",
         )
     return session_id
-
 
 def is_within_range(value, lower, upper):
     """Plain numeric range check, not a regex. Used for measurements."""

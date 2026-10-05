@@ -15,7 +15,6 @@ from .validation import (
     is_within_range,
 )
 
-
 class Observation:
     """A single measurement window for one fitness session."""
 
