@@ -1,5 +1,3 @@
-
-Readme · MD
 # Smart Fitness Session Analyzer (Assignment II)
  
 **Student name:** Sebastian Skrøvseth Haugen

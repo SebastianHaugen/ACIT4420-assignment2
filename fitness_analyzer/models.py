@@ -1,6 +1,6 @@
 """Domain classes: Observation, Participant and Session.
 
-Carried over from Assignment I with the same design: Session uses
+Carried over from Assignment I with the same design, Session uses
 composition (it HAS a Participant and a list of Observations, rather
 than being either one), and Participant keeps its baseline values
 behind a protected attribute reached only through a property.

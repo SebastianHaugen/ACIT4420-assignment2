@@ -32,7 +32,7 @@ def write_summary_csv(output_dir, results):
     return path
 
 def write_report_txt(output_dir, results):
-    """A readable explanation of each result - analysis_report.txt."""
+    """A readable explanation of each result in analysis_report.txt."""
     path = Path(output_dir) / "analysis_report.txt"
     lines = []
     for result in results:

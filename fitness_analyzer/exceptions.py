@@ -1,6 +1,6 @@
 """Custom exceptions for the fitness analyzer package.
 
-Both exceptions carry an optional `field` attribute, so the code that
+Both exceptions carry an optional "field" attribute, so the code that
 catches them (the loader) can log exactly which column caused the
 problem, not just that "something" went wrong in the row.
 """
